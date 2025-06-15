@@ -1,18 +1,51 @@
 "use client"; // This is a client component which means it can only be used on the client side and not on the server side
-import React from "react";
+import React, { use, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
+
+  const router = useRouter();
+
   const [user, setUser] = React.useState({
     email: "",
     password: "",
   });
-  const onLogin = async () => {};
+
+  const [buttonDisabled, setButtonDisabled] = React.useState(false);
+
+  useEffect(() => {
+    if(user.email.length > 0 && user.password.length > 0) {
+      setButtonDisabled(false);
+    } else {
+      setButtonDisabled(true);
+    }
+  }, [user]);
+
+  const [loading , setLoading] = React.useState(false);
+
+  const onLogin = async () => {
+ try {
+  setLoading(true);
+const response = await axios.post("/api/users/login", user);
+console.log("Login success", response.data);
+toast.success("Login successful!");
+router.push("/profile"); // Redirect to profile page after successful login
+  // You can also store the token in localStorage or cookies if needed
+} catch (error:any) {
+   console.log("Login failed", error.message);
+   toast.error(error.message);
+ } finally {
+   setLoading(false);
+  }
+  };
+
   return (
+
     <div className="flex flex-col bg-[#151212] items-center justify-center min-h-screen py-2">
-      <h1>Login</h1>
+      <h1>{loading ? "processing" : "Login"}</h1>
       <br />
       <label htmlFor="email"> email</label>
       <input
@@ -36,7 +69,7 @@ export default function LoginPage() {
         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 border border-blue-600 transition-colors duration-300"
         onClick={onLogin}
       >
-        Login
+        {buttonDisabled ? "Please login " : " Login"}
       </button>
       <Link className="px-3 py-2 text-gray-300 text-[15px]" href="/signup">
         Don't have an account? Signup
