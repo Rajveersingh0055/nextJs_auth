@@ -3,7 +3,7 @@ import React, { use, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function LoginPage() {
 
@@ -31,7 +31,7 @@ export default function LoginPage() {
   setLoading(true);
 const response = await axios.post("/api/users/login", user);
 console.log("Login success", response.data);
-toast.success("Login successful!");
+toast.success("Login successful! Please wait.");
 router.push("/profile"); // Redirect to profile page after successful login
   // You can also store the token in localStorage or cookies if needed
 } catch (error:any) {
