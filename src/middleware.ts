@@ -22,7 +22,7 @@ export function middleware(request : NextRequest){
     // If the user is authenticated, redirect to home if they try to access login or signup
     // If the user is not authenticated, allow access to public paths
     // If the user is authenticated, allow access to protected paths
-    const isPublicPath = path === '/login' || path === '/signup';
+    const isPublicPath = path === '/login' || path === '/signup' || path === '/verifyemail';
 
     // If the user is authenticated, redirect to home if they try to access login or signup
     // If the user is not authenticated, allow access to public path
@@ -49,5 +49,6 @@ export const config = {
         '/profile',
         '/login',
         '/signup',
+        '/verifyemail',
     ]
 }
